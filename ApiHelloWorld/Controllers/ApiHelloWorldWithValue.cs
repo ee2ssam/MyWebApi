@@ -64,4 +64,43 @@ namespace ApiHelloWorld.Controllers
         public string Text { get; set; }
     }
 
+    //View 페이지
+    public class ApiHelloWorldDemoController : Controller
+    {
+        public IActionResult Index()
+        {
+            string html = @"
+<html>
+<head>
+    <title>jQuery로 JSON사용하기 </title>
+</head>
+<body>
+    <h1>Web API호출</h1>
+    <div id='print'></div>
+    <script src = 'https://code.jquery.com/jquery-1.12.4.min.js'></script>
+    <script>
+        var API_URI = '/api/ApiHelloWorldWithValue';
+        $(function() {
+            $.getJSON(API_URI, function(data) {
+                var str = '<dl>';
+                $.each(data, function(index, entry) {
+                    str += '<dt>' + entry.id + '</dt>';
+                    str += '<dd>' + entry.text + '</dd>';
+                });
+                str += '</dl>';                
+                $('#print').html(str);
+            });
+        });
+    </script>
+</body>
+</html>
+";
+            return new ContentResult()
+            {
+                Content = html,
+                ContentType = "text/html; charset=utf-8"
+            }; 
+        }
+    }
+
 }

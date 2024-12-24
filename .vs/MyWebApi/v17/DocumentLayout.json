@@ -3,16 +3,24 @@
   "WorkspaceRootPath": "D:\\Project\\MyWebApi\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|d:\\project\\mywebapi\\apihelloworld\\controllers\\servicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|solutionrelative:apihelloworld\\controllers\\servicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|d:\\project\\mywebapi\\apihelloworld\\controllers\\apihelloworldwithvalue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|solutionrelative:apihelloworld\\controllers\\apihelloworldwithvalue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|d:\\project\\mywebapi\\apihelloworld\\controllers\\valuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|solutionrelative:apihelloworld\\controllers\\valuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|d:\\project\\mywebapi\\apihelloworld\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|solutionrelative:apihelloworld\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|d:\\project\\mywebapi\\apihelloworld\\controllers\\apihelloworldcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|solutionrelative:apihelloworld\\controllers\\apihelloworldcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|d:\\project\\mywebapi\\apihelloworld\\controllers\\valuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EA2BD87-65A3-4679-96AA-FDAB69C7EC05}|ApiHelloWorld\\ApiHelloWorld.csproj|solutionrelative:apihelloworld\\controllers\\valuescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,32 +35,56 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ServicesController.cs",
+              "DocumentMoniker": "D:\\Project\\MyWebApi\\ApiHelloWorld\\Controllers\\ServicesController.cs",
+              "RelativeDocumentMoniker": "ApiHelloWorld\\Controllers\\ServicesController.cs",
+              "ToolTip": "D:\\Project\\MyWebApi\\ApiHelloWorld\\Controllers\\ServicesController.cs",
+              "RelativeToolTip": "ApiHelloWorld\\Controllers\\ServicesController.cs",
+              "ViewState": "AQIAAFIAAAAAAAAAAAAowGcAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-24T01:47:34.087Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "D:\\Project\\MyWebApi\\ApiHelloWorld\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "ApiHelloWorld\\Controllers\\HomeController.cs",
+              "ToolTip": "D:\\Project\\MyWebApi\\ApiHelloWorld\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "ApiHelloWorld\\Controllers\\HomeController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-24T00:19:36.667Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ApiHelloWorldWithValue.cs",
               "DocumentMoniker": "D:\\Project\\MyWebApi\\ApiHelloWorld\\Controllers\\ApiHelloWorldWithValue.cs",
               "RelativeDocumentMoniker": "ApiHelloWorld\\Controllers\\ApiHelloWorldWithValue.cs",
               "ToolTip": "D:\\Project\\MyWebApi\\ApiHelloWorld\\Controllers\\ApiHelloWorldWithValue.cs",
               "RelativeToolTip": "ApiHelloWorld\\Controllers\\ApiHelloWorldWithValue.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAmwAgAAAATAAAA",
+              "ViewState": "AQIAAC4AAAAAAAAAAAA5wAkAAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-23T03:08:20.549Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ApiHelloWorldController.cs",
               "DocumentMoniker": "D:\\Project\\MyWebApi\\ApiHelloWorld\\Controllers\\ApiHelloWorldController.cs",
               "RelativeDocumentMoniker": "ApiHelloWorld\\Controllers\\ApiHelloWorldController.cs",
               "ToolTip": "D:\\Project\\MyWebApi\\ApiHelloWorld\\Controllers\\ApiHelloWorldController.cs",
               "RelativeToolTip": "ApiHelloWorld\\Controllers\\ApiHelloWorldController.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAQwBkAAAAJAAAA",
+              "ViewState": "AQIAACUAAAAAAAAAAAAkwBkAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-23T02:44:13.959Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-23T02:44:13.959Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "ValuesController.cs",
               "DocumentMoniker": "D:\\Project\\MyWebApi\\ApiHelloWorld\\Controllers\\ValuesController.cs",
               "RelativeDocumentMoniker": "ApiHelloWorld\\Controllers\\ValuesController.cs",
@@ -60,8 +92,7 @@
               "RelativeToolTip": "ApiHelloWorld\\Controllers\\ValuesController.cs",
               "ViewState": "AQIAAAgAAAAAAAAAAAAxwBUAAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-23T02:20:46.424Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-23T02:20:46.424Z"
             }
           ]
         }
