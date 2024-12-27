@@ -30,6 +30,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Project/MyWebApi/ApiHelloWorld/Views/MyRankingServiecsTest/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlSYW5raW5nU2VydmllY3NUZXN0XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Project/MyWebApi/ApiHelloWorld/Views/PointLog/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9pbnRMb2dcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Project/MyWebApi/ApiHelloWorld/Views/PointStatus/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9pbnRTdGF0dXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Project/MyWebApi/ApiHelloWorld/Views/Point/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUG9pbnRcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Project/MyWebApi/ApiHelloWorld/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
