@@ -1,0 +1,10 @@
+D:\Project\MyWebApi\MyFive\bin\Debug\MyFive.dacpac
+D:\Project\MyWebApi\MyFive\bin\Debug\MyFive.dll
+D:\Project\MyWebApi\MyFive\bin\Debug\MyFive.pdb
+D:\Project\MyWebApi\MyFive\obj\Debug\MyFive.sqlproj.AssemblyReference.cache
+D:\Project\MyWebApi\MyFive\obj\Debug\Model.xml
+D:\Project\MyWebApi\MyFive\obj\Debug\refactor.xml
+D:\Project\MyWebApi\MyFive\obj\Debug\postdeploy.sql
+D:\Project\MyWebApi\MyFive\obj\Debug\predeploy.sql
+D:\Project\MyWebApi\MyFive\obj\Debug\MyFive.dll
+D:\Project\MyWebApi\MyFive\obj\Debug\MyFive.pdb

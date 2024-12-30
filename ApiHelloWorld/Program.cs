@@ -20,6 +20,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IPointRepository, PointRepositoryInMemory>(); //InMemory
 builder.Services.AddTransient<IPointLogRepository, PointLogRepository>();
 
+//Five °ü¸®
+builder.Services.AddTransient<IFiveRepository, FiveRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

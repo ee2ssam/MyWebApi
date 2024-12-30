@@ -145,3 +145,4 @@ D:\Project\MyWebApi\ApiHelloWorld\obj\Debug\net8.0\refint\ApiHelloWorld.dll
 D:\Project\MyWebApi\ApiHelloWorld\obj\Debug\net8.0\ApiHelloWorld.pdb
 D:\Project\MyWebApi\ApiHelloWorld\obj\Debug\net8.0\ApiHelloWorld.genruntimeconfig.cache
 D:\Project\MyWebApi\ApiHelloWorld\obj\Debug\net8.0\ref\ApiHelloWorld.dll
+D:\Project\MyWebApi\ApiHelloWorld\bin\Debug\net8.0\Dapper.dll

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiHelloWorld", "ApiHelloWo
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MyPoint", "MyPoint\MyPoint.sqlproj", "{EF4C8851-2828-4124-BA6D-F2F48FC927F6}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MyFive", "MyFive\MyFive.sqlproj", "{13893D7A-0E0D-4C69-B758-184B5F6B1B02}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,12 @@ Global
 		{EF4C8851-2828-4124-BA6D-F2F48FC927F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF4C8851-2828-4124-BA6D-F2F48FC927F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF4C8851-2828-4124-BA6D-F2F48FC927F6}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{13893D7A-0E0D-4C69-B758-184B5F6B1B02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13893D7A-0E0D-4C69-B758-184B5F6B1B02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13893D7A-0E0D-4C69-B758-184B5F6B1B02}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{13893D7A-0E0D-4C69-B758-184B5F6B1B02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13893D7A-0E0D-4C69-B758-184B5F6B1B02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13893D7A-0E0D-4C69-B758-184B5F6B1B02}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
