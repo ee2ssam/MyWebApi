@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="ApiServices/ApiServices.csproj" />
+  <Project Path="FiveServices/FiveServices.csproj" />
+  <Project Path="HelloWebApi/HelloWebApi.csproj" />
+</Solution>

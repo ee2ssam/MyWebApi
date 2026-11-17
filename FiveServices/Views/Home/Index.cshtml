@@ -1,0 +1,362 @@
+﻿@{
+    ViewData["Title"] = "Five Table CRUD Tester";
+}
+
+<div class="container py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="bi bi-database"></i> Supabase MyGameDB - Five 테이블 CRUD 테스터</h2>
+            <p class="text-muted mb-0"><code>/api/fives</code> 엔드포인트의 Get, Get(id), Post, Put, Delete 기능을 실시간으로 테스트합니다.</p>
+        </div>
+        <div>
+            <button class="btn btn-outline-primary" onclick="getAllFives()">
+                <i class="bi bi-arrow-clockwise"></i> 새로고침 (GET All)
+            </button>
+        </div>
+    </div>
+
+    <!-- Alert Message Area -->
+    <div id="alertBox" class="alert d-none alert-dismissible fade show" role="alert">
+        <span id="alertMessage"></span>
+        <button type="button" class="btn-close" onclick="hideAlert()" aria-label="Close"></button>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column: CRUD Controls -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <span class="badge bg-light text-primary me-2">POST</span>
+                    <h6 class="mb-0 fw-semibold">1. 데이터 생성 (POST)</h6>
+                </div>
+                <div class="card-body">
+                    <form id="postForm" onsubmit="handlePost(event)">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Note <small class="text-muted">(최대 100자)</small></label>
+                            <input type="text" id="postNote" class="form-control" placeholder="추가할 Note 내용을 입력하세요" maxlength="100" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            POST 전송 (추가)
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white d-flex align-items-center">
+                    <span class="badge bg-light text-success me-2">GET(id)</span>
+                    <h6 class="mb-0 fw-semibold">2. 단일 데이터 조회 (GET by ID)</h6>
+                </div>
+                <div class="card-body">
+                    <form id="getByIdForm" onsubmit="handleGetById(event)">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">조회할 ID</label>
+                            <input type="number" id="getId" class="form-control" placeholder="ID 입력 (예: 1)" required min="1" />
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            GET(id) 전송 (조회)
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning text-dark d-flex align-items-center">
+                    <span class="badge bg-dark text-white me-2">PUT</span>
+                    <h6 class="mb-0 fw-semibold">3. 데이터 수정 (PUT)</h6>
+                </div>
+                <div class="card-body">
+                    <form id="putForm" onsubmit="handlePut(event)">
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">수정 대상 ID</label>
+                                <input type="number" id="putId" class="form-control" placeholder="ID 입력" required min="1" />
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label fw-bold">새로운 Note <small class="text-muted">(최대 100자)</small></label>
+                                <input type="text" id="putNote" class="form-control" placeholder="수정할 Note 내용" maxlength="100" required />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100 fw-bold">
+                            PUT 전송 (수정)
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white d-flex align-items-center">
+                    <span class="badge bg-light text-danger me-2">DELETE</span>
+                    <h6 class="mb-0 fw-semibold">4. 데이터 삭제 (DELETE)</h6>
+                </div>
+                <div class="card-body">
+                    <form id="deleteForm" onsubmit="handleDelete(event)">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">삭제할 ID</label>
+                            <input type="number" id="deleteId" class="form-control" placeholder="ID 입력" required min="1" />
+                        </div>
+                        <button type="submit" class="btn btn-danger w-100">
+                            DELETE 전송 (삭제)
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Table & Response Console -->
+        <div class="col-lg-6">
+            <!-- Table View -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-semibold">📋 Five 테이블 목록 (GET: /api/fives)</h6>
+                    <span id="dataCountBadge" class="badge bg-secondary">0 건</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+                        <table class="table table-hover table-striped align-middle mb-0 text-center">
+                            <thead class="table-light sticky-top">
+                                <tr>
+                                    <th style="width: 80px;">ID</th>
+                                    <th class="text-start">Note</th>
+                                    <th style="width: 140px;">액션</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fivesTableBody">
+                                <tr>
+                                    <td colspan="3" class="text-muted py-3">데이터를 불러오는 중입니다...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response Console -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-semibold">⚡ 실시간 API 응답 콘솔</h6>
+                    <span id="statusBadge" class="badge bg-light text-dark">대기 중</span>
+                </div>
+                <div class="card-body bg-light font-monospace">
+                    <div class="d-flex justify-content-between mb-2">
+                        <small class="text-muted" id="lastApiInfo">호출 기록 없음</small>
+                        <small class="text-muted" id="lastApiTime"></small>
+                    </div>
+                    <pre id="responseJson" class="p-3 bg-dark text-light rounded mb-0" style="min-height: 220px; max-height: 350px; overflow: auto; font-size: 13px;">// 테스트 버튼을 클릭하면 여기에 응답 데이터가 표시됩니다.</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const API_URL = '/api/fives';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getAllFives();
+    });
+
+    function showAlert(message, type = 'success') {
+        const alertBox = document.getElementById('alertBox');
+        const alertMessage = document.getElementById('alertMessage');
+        alertBox.className = `alert alert-${type} alert-dismissible fade show`;
+        alertMessage.textContent = message;
+        alertBox.classList.remove('d-none');
+    }
+
+    function hideAlert() {
+        document.getElementById('alertBox').classList.add('d-none');
+    }
+
+    function setConsole(method, url, status, data) {
+        document.getElementById('lastApiInfo').innerHTML = `<strong class="text-primary">${method}</strong> ${url}`;
+        document.getElementById('lastApiTime').textContent = new Date().toLocaleTimeString();
+
+        const badge = document.getElementById('statusBadge');
+        badge.textContent = `Status: ${status}`;
+        if (status >= 200 && status < 300) {
+            badge.className = 'badge bg-success text-white';
+        } else {
+            badge.className = 'badge bg-danger text-white';
+        }
+
+        document.getElementById('responseJson').textContent = JSON.stringify(data, null, 2);
+    }
+
+    // 1. GET: All Fives
+    async function getAllFives() {
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            setConsole('GET', API_URL, res.status, data);
+
+            const tbody = document.getElementById('fivesTableBody');
+            const countBadge = document.getElementById('dataCountBadge');
+            tbody.innerHTML = '';
+
+            if (!Array.isArray(data) || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-muted py-3">데이터가 없습니다.</td></tr>';
+                countBadge.textContent = '0 건';
+                return;
+            }
+
+            countBadge.textContent = `${data.length} 건`;
+
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${item.id}</strong></td>
+                    <td class="text-start">${escapeHtml(item.note)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-warning me-1" onclick="selectForEdit(${item.id}, '${escapeJs(item.note)}')">
+                            선택
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="quickDelete(${item.id})">
+                            삭제
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (err) {
+            console.error(err);
+            showAlert('목록을 불러오는 중 오류가 발생했습니다: ' + err.message, 'danger');
+            setConsole('GET', API_URL, 'Error', { error: err.message });
+        }
+    }
+
+    // 2. GET: by ID
+    async function handleGetById(e) {
+        e.preventDefault();
+        const id = document.getElementById('getId').value;
+        if (!id) return;
+
+        try {
+            const res = await fetch(`${API_URL}/${id}`);
+            const data = await res.json();
+            setConsole('GET', `${API_URL}/${id}`, res.status, data);
+
+            if (res.ok) {
+                showAlert(`ID ${id} 데이터 조회 성공!`);
+                // PUT 폼에도 자동 입력 편의 제공
+                selectForEdit(data.id, data.note);
+            } else {
+                showAlert(`조회 실패: ${data.message || '데이터를 찾을 수 없습니다.'}`, 'warning');
+            }
+        } catch (err) {
+            console.error(err);
+            showAlert('조회 중 오류가 발생했습니다.', 'danger');
+            setConsole('GET', `${API_URL}/${id}`, 'Error', { error: err.message });
+        }
+    }
+
+    // 3. POST: Create
+    async function handlePost(e) {
+        e.preventDefault();
+        const note = document.getElementById('postNote').value;
+        if (!note) return;
+
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ note: note })
+            });
+            const data = await res.json();
+            setConsole('POST', API_URL, res.status, data);
+
+            if (res.ok) {
+                showAlert(`새 데이터 등록 성공! (생성된 ID: ${data.id})`);
+                document.getElementById('postNote').value = '';
+                getAllFives();
+            } else {
+                showAlert('등록 실패: ' + JSON.stringify(data), 'danger');
+            }
+        } catch (err) {
+            console.error(err);
+            showAlert('데이터 등록 중 오류가 발생했습니다.', 'danger');
+            setConsole('POST', API_URL, 'Error', { error: err.message });
+        }
+    }
+
+    // 4. PUT: Update
+    async function handlePut(e) {
+        e.preventDefault();
+        const id = parseInt(document.getElementById('putId').value, 10);
+        const note = document.getElementById('putNote').value;
+        if (!id || !note) return;
+
+        try {
+            const res = await fetch(`${API_URL}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id, note: note })
+            });
+            const data = await res.json();
+            setConsole('PUT', `${API_URL}/${id}`, res.status, data);
+
+            if (res.ok) {
+                showAlert(`ID ${id} 데이터가 성공적으로 수정되었습니다!`);
+                getAllFives();
+            } else {
+                showAlert(`수정 실패: ${data.message || '오류 발생'}`, 'warning');
+            }
+        } catch (err) {
+            console.error(err);
+            showAlert('데이터 수정 중 오류가 발생했습니다.', 'danger');
+            setConsole('PUT', `${API_URL}/${id}`, 'Error', { error: err.message });
+        }
+    }
+
+    // 5. DELETE: Remove
+    async function handleDelete(e) {
+        e.preventDefault();
+        const id = parseInt(document.getElementById('deleteId').value, 10);
+        if (!id) return;
+        await executeDelete(id);
+    }
+
+    async function quickDelete(id) {
+        if (!confirm(`ID ${id} 데이터를 정말로 삭제하시겠습니까?`)) return;
+        await executeDelete(id);
+    }
+
+    async function executeDelete(id) {
+        try {
+            const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            const data = await res.json();
+            setConsole('DELETE', `${API_URL}/${id}`, res.status, data);
+
+            if (res.ok) {
+                showAlert(`ID ${id} 데이터가 삭제되었습니다.`);
+                document.getElementById('deleteId').value = '';
+                getAllFives();
+            } else {
+                showAlert(`삭제 실패: ${data.message || '오류 발생'}`, 'warning');
+            }
+        } catch (err) {
+            console.error(err);
+            showAlert('데이터 삭제 중 오류가 발생했습니다.', 'danger');
+            setConsole('DELETE', `${API_URL}/${id}`, 'Error', { error: err.message });
+        }
+    }
+
+    function selectForEdit(id, note) {
+        document.getElementById('putId').value = id;
+        document.getElementById('putNote').value = note;
+        document.getElementById('deleteId').value = id;
+        document.getElementById('getId').value = id;
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function escapeJs(str) {
+        if (!str) return '';
+        return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
+</script>
+}
