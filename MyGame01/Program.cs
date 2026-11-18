@@ -79,8 +79,15 @@ app.MapGet("/api/db-check", async (MyGameDbContext dbContext) =>
     }
 });
 
-// Render Health Check endpoint (경량 헬스체크용)
+// Render Health Check & Ping endpoint
 app.MapGet("/healthz", () => Results.Ok("OK"));
+app.MapGet("/api/ping", () => Results.Ok(new
+{
+    status = "Healthy",
+    message = "pong",
+    time = DateTime.UtcNow,
+    service = "MyGame01"
+}));
 
 app.MapControllerRoute(
     name: "default",
