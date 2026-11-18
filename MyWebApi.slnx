@@ -2,4 +2,5 @@
   <Project Path="ApiServices/ApiServices.csproj" />
   <Project Path="FiveServices/FiveServices.csproj" />
   <Project Path="HelloWebApi/HelloWebApi.csproj" />
+  <Project Path="MyGame01/MyGame01.csproj" Id="53c5d966-e714-4721-84b6-11593bd8351a" />
 </Solution>

@@ -1,0 +1,471 @@
+﻿@{
+    ViewData["Title"] = "MyGame01 프로토콜 테스터";
+}
+
+<div class="container py-3">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-joystick text-primary"></i> MyGame01 게임 프로토콜 테스터
+            </h2>
+            <p class="text-muted mb-0">
+                Supabase <code>game01_users</code> 저장 프로시저 및 5개 API 프로토콜을 실시간으로 테스트합니다.
+            </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-secondary p-2" id="currentActiveUserBadge">선택된 유저: 없음</span>
+        </div>
+    </div>
+
+    <!-- Alert Area -->
+    <div id="alertBox" class="alert d-none alert-dismissible fade show" role="alert">
+        <span id="alertMessage"></span>
+        <button type="button" class="btn-close" onclick="hideAlert()" aria-label="Close"></button>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left: 5 Protocol Test Cards -->
+        <div class="col-lg-7">
+
+            <!-- 1. UserAddService (1102) -->
+            <div class="card shadow-sm mb-3 border-success">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center py-2">
+                    <h6 class="mb-0 fw-bold"><i class="bi bi-person-plus-fill"></i> [1102] 신규 유저 등록 (UserAddService)</h6>
+                    <span class="badge bg-light text-success">POST /api/UserAddService</span>
+                </div>
+                <div class="card-body py-2">
+                    <form onsubmit="handleUserAdd(event)">
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold mb-1">UserId (최대 8자)</label>
+                                <input type="text" id="addUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold mb-1">Name (닉네임)</label>
+                                <input type="text" id="addName" class="form-control form-control-sm" placeholder="용사01" maxlength="20" required />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold mb-1">Password (최대 20자)</label>
+                                <input type="password" id="addPassword" class="form-control form-control-sm" placeholder="pass1234" maxlength="20" required />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-success w-100 fw-bold">
+                            유저 등록 전송 (Protocol 1102)
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 2. UserLoginService (1101) -->
+            <div class="card shadow-sm mb-3 border-primary">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2">
+                    <h6 class="mb-0 fw-bold"><i class="bi bi-box-arrow-in-right"></i> [1101] 로그인 (UserLoginService)</h6>
+                    <span class="badge bg-light text-primary">POST /api/UserLoginService</span>
+                </div>
+                <div class="card-body py-2">
+                    <form onsubmit="handleUserLogin(event)">
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold mb-1">UserId</label>
+                                <input type="text" id="loginUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold mb-1">Password</label>
+                                <input type="password" id="loginPassword" class="form-control form-control-sm" placeholder="pass1234" maxlength="20" required />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary w-100 fw-bold">
+                            로그인 전송 (Protocol 1101)
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 3. UserInfoService (1103) -->
+            <div class="card shadow-sm mb-3 border-info">
+                <div class="card-header bg-info text-dark d-flex justify-content-between align-items-center py-2">
+                    <h6 class="mb-0 fw-bold"><i class="bi bi-person-badge"></i> [1103] 유저 정보 조회 (UserInfoService)</h6>
+                    <span class="badge bg-dark text-white">POST /api/UserInfoService</span>
+                </div>
+                <div class="card-body py-2">
+                    <form onsubmit="handleUserInfo(event)">
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-8">
+                                <label class="form-label small fw-bold mb-1">조회할 UserId</label>
+                                <input type="text" id="infoUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-sm btn-info w-100 fw-bold text-dark">
+                                    정보 조회 (Protocol 1103)
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 4. LevelupService (1104) -->
+            <div class="card shadow-sm mb-3 border-warning">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center py-2">
+                    <h6 class="mb-0 fw-bold"><i class="bi bi-arrow-up-circle-fill"></i> [1104] 레벨업 (LevelupService)</h6>
+                    <span class="badge bg-dark text-white">POST /api/LevelupService</span>
+                </div>
+                <div class="card-body py-2">
+                    <form onsubmit="handleLevelup(event)">
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-8">
+                                <label class="form-label small fw-bold mb-1">레벨업 대상 UserId</label>
+                                <input type="text" id="levelupUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-sm btn-warning w-100 fw-bold">
+                                    레벨업 (Protocol 1104)
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 5. AddGoldService (1105) -->
+            <div class="card shadow-sm mb-3 border-secondary">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
+                    <h6 class="mb-0 fw-bold"><i class="bi bi-coin text-warning"></i> [1105] 골드 추가 (AddGoldService)</h6>
+                    <span class="badge bg-light text-dark">POST /api/AddGoldService</span>
+                </div>
+                <div class="card-body py-2">
+                    <form onsubmit="handleAddGold(event)">
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold mb-1">대상 UserId</label>
+                                <input type="text" id="goldUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold mb-1">추가할 Gold</label>
+                                <input type="number" id="goldAmount" class="form-control form-control-sm" placeholder="500" required min="1" />
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-secondary w-100 fw-bold">
+                            골드 추가 (Protocol 1105)
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right: Current User Status Card & JSON Response Console -->
+        <div class="col-lg-5">
+
+            <!-- User Info Summary Card -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center py-2">
+                    <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-person-check-fill text-primary"></i> 플레이어 상태 창</h6>
+                    <button class="btn btn-sm btn-outline-secondary py-0" onclick="refreshCurrentUserInfo()">새로고침</button>
+                </div>
+                <div class="card-body py-2">
+                    <div class="row g-2 text-center">
+                        <div class="col-6">
+                            <div class="p-2 border rounded bg-light">
+                                <small class="text-muted d-block">아이디 / 닉네임</small>
+                                <strong id="cardUserLabel">-</strong>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 border rounded bg-light">
+                                <small class="text-muted d-block">레벨 (Level)</small>
+                                <span class="badge bg-warning text-dark fs-6" id="cardUserLevel">Lv. -</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 border rounded bg-light">
+                                <small class="text-muted d-block">체력 (HP)</small>
+                                <span class="text-danger fw-bold fs-6" id="cardUserHealth">-</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 border rounded bg-light">
+                                <small class="text-muted d-block">소지금 (Gold)</small>
+                                <span class="text-warning fw-bold fs-6" id="cardUserGold">- G</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Response Console -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
+                    <h6 class="mb-0 fw-bold small"><i class="bi bi-terminal"></i> 실시간 API 프로토콜 통신 콘솔</h6>
+                    <span id="responseStatusBadge" class="badge bg-secondary">대기 중</span>
+                </div>
+                <div class="card-body bg-light font-monospace py-2">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small class="text-muted" id="lastApiInfo">호출 기록 없음</small>
+                        <small class="text-muted" id="lastApiTime"></small>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted fw-bold">Result 코드 해석:</small>
+                        <span id="resultInterpretation" class="badge bg-info text-dark">-</span>
+                    </div>
+                    <pre id="responseJson" class="p-3 bg-dark text-light rounded mb-0" style="min-height: 280px; max-height: 380px; overflow: auto; font-size: 13px;">// 테스트 버튼을 클릭하면 요청 및 응답 패킷이 표시됩니다.</pre>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    let currentUserId = '';
+
+    function setActiveUser(userId) {
+        if (!userId) return;
+        currentUserId = userId.trim();
+        document.getElementById('currentActiveUserBadge').textContent = `선택된 유저: ${currentUserId}`;
+        document.getElementById('currentActiveUserBadge').className = 'badge bg-primary p-2';
+
+        // 모든 입력창에 자동 동기화
+        document.getElementById('loginUserId').value = currentUserId;
+        document.getElementById('infoUserId').value = currentUserId;
+        document.getElementById('levelupUserId').value = currentUserId;
+        document.getElementById('goldUserId').value = currentUserId;
+    }
+
+    function showAlert(message, type = 'success') {
+        const box = document.getElementById('alertBox');
+        const msg = document.getElementById('alertMessage');
+        box.className = `alert alert-${type} alert-dismissible fade show`;
+        msg.textContent = message;
+        box.classList.remove('d-none');
+    }
+
+    function hideAlert() {
+        document.getElementById('alertBox').classList.add('d-none');
+    }
+
+    function setConsole(serviceName, requestData, responseData, statusCode, interpretation) {
+        document.getElementById('lastApiInfo').innerHTML = `<strong class="text-primary">POST</strong> /api/${serviceName}`;
+        document.getElementById('lastApiTime').textContent = new Date().toLocaleTimeString();
+
+        const badge = document.getElementById('responseStatusBadge');
+        badge.textContent = `HTTP ${statusCode}`;
+        badge.className = statusCode === 200 ? 'badge bg-success' : 'badge bg-danger';
+
+        document.getElementById('resultInterpretation').textContent = interpretation || '-';
+
+        const displayObj = {
+            _Request: requestData,
+            _Response: responseData
+        };
+        document.getElementById('responseJson').textContent = JSON.stringify(displayObj, null, 2);
+    }
+
+    // 1. UserAddService (1102)
+    async function handleUserAdd(e) {
+        e.preventDefault();
+        const userId = document.getElementById('addUserId').value.trim();
+        const name = document.getElementById('addName').value.trim();
+        const password = document.getElementById('addPassword').value.trim();
+
+        const reqBody = {
+            protocol: 1102,
+            userId: userId,
+            name: name,
+            password: password
+        };
+
+        try {
+            const res = await fetch('/api/UserAddService', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqBody)
+            });
+            const data = await res.json();
+
+            let interpretation = '';
+            if (data.result === 0) {
+                interpretation = 'Result: 0 (등록 성공)';
+                showAlert(`[1102] 유저 '${userId}' 등록 성공!`);
+                setActiveUser(userId);
+                handleUserInfoInternal(userId);
+            } else if (data.result === 1) {
+                interpretation = 'Result: 1 (중복 유저가 있음)';
+                showAlert(`[1102] 이미 존재하는 유저 아이디입니다.`, 'warning');
+            } else {
+                interpretation = 'Result: 2 (등록 실패)';
+                showAlert(`[1102] 유저 등록에 실패했습니다.`, 'danger');
+            }
+
+            setConsole('UserAddService', reqBody, data, res.status, interpretation);
+        } catch (err) {
+            showAlert('호출 오류: ' + err.message, 'danger');
+        }
+    }
+
+    // 2. UserLoginService (1101)
+    async function handleUserLogin(e) {
+        e.preventDefault();
+        const userId = document.getElementById('loginUserId').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+
+        const reqBody = {
+            protocol: 1101,
+            userId: userId,
+            password: password
+        };
+
+        try {
+            const res = await fetch('/api/UserLoginService', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqBody)
+            });
+            const data = await res.json();
+
+            let interpretation = '';
+            if (data.result === 0) {
+                interpretation = 'Result: 0 (로그인 성공)';
+                showAlert(`[1101] '${userId}' 로그인 성공!`);
+                setActiveUser(userId);
+                handleUserInfoInternal(userId);
+            } else if (data.result === 1) {
+                interpretation = 'Result: 1 (유저 아이디가 없음)';
+                showAlert(`[1101] 유저 아이디가 존재하지 않습니다.`, 'warning');
+            } else {
+                interpretation = 'Result: 2 (로그인 실패 - 비밀번호 불일치)';
+                showAlert(`[1101] 로그인 실패: 비밀번호가 일치하지 않습니다.`, 'danger');
+            }
+
+            setConsole('UserLoginService', reqBody, data, res.status, interpretation);
+        } catch (err) {
+            showAlert('호출 오류: ' + err.message, 'danger');
+        }
+    }
+
+    // 3. UserInfoService (1103)
+    async function handleUserInfo(e) {
+        e.preventDefault();
+        const userId = document.getElementById('infoUserId').value.trim();
+        await handleUserInfoInternal(userId);
+    }
+
+    async function handleUserInfoInternal(userId) {
+        if (!userId) return;
+        const reqBody = {
+            protocol: 1103,
+            userId: userId
+        };
+
+        try {
+            const res = await fetch('/api/UserInfoService', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqBody)
+            });
+            const data = await res.json();
+
+            let interpretation = '';
+            if (data.result === 0) {
+                interpretation = 'Result: 0 (정보 가져오기 성공)';
+                showAlert(`[1103] '${userId}' 유저 정보 조회 성공!`);
+                setActiveUser(userId);
+
+                // 플레이어 상태 창 갱신
+                document.getElementById('cardUserLabel').textContent = `${data.userId} (${data.name})`;
+                document.getElementById('cardUserLevel').textContent = `Lv. ${data.level}`;
+                document.getElementById('cardUserHealth').textContent = data.health;
+                document.getElementById('cardUserGold').textContent = `${data.gold.toLocaleString()} G`;
+            } else {
+                interpretation = 'Result: 1 (정보 가져오기 실패 - 유저 없음)';
+                showAlert(`[1103] 유저 정보를 찾을 수 없습니다.`, 'warning');
+            }
+
+            setConsole('UserInfoService', reqBody, data, res.status, interpretation);
+        } catch (err) {
+            showAlert('호출 오류: ' + err.message, 'danger');
+        }
+    }
+
+    // 4. LevelupService (1104)
+    async function handleLevelup(e) {
+        e.preventDefault();
+        const userId = document.getElementById('levelupUserId').value.trim();
+        const reqBody = {
+            protocol: 1104,
+            userId: userId
+        };
+
+        try {
+            const res = await fetch('/api/LevelupService', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqBody)
+            });
+            const data = await res.json();
+
+            let interpretation = '';
+            if (data.result === 0) {
+                interpretation = `Result: 0 (레벨업 성공! -> Lv.${data.level})`;
+                showAlert(`[1104] 레벨업 축하합니다! 새로운 레벨: Lv.${data.level}`, 'success');
+                setActiveUser(userId);
+                handleUserInfoInternal(userId);
+            } else {
+                interpretation = 'Result: 1 (레벨업 실패)';
+                showAlert(`[1104] 레벨업에 실패했습니다.`, 'warning');
+            }
+
+            setConsole('LevelupService', reqBody, data, res.status, interpretation);
+        } catch (err) {
+            showAlert('호출 오류: ' + err.message, 'danger');
+        }
+    }
+
+    // 5. AddGoldService (1105)
+    async function handleAddGold(e) {
+        e.preventDefault();
+        const userId = document.getElementById('goldUserId').value.trim();
+        const gold = parseInt(document.getElementById('goldAmount').value, 10);
+
+        const reqBody = {
+            protocol: 1105,
+            userId: userId,
+            gold: gold
+        };
+
+        try {
+            const res = await fetch('/api/AddGoldService', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqBody)
+            });
+            const data = await res.json();
+
+            let interpretation = '';
+            if (data.result === 0) {
+                interpretation = `Result: 0 (골드 추가 성공! 현재 소지금: ${data.gold} G)`;
+                showAlert(`[1105] 골드가 성공적으로 지급되었습니다! (총 소지금: ${data.gold} G)`, 'success');
+                setActiveUser(userId);
+                handleUserInfoInternal(userId);
+            } else {
+                interpretation = 'Result: 1 (골드 추가 실패)';
+                showAlert(`[1105] 골드 추가 실패`, 'warning');
+            }
+
+            setConsole('AddGoldService', reqBody, data, res.status, interpretation);
+        } catch (err) {
+            showAlert('호출 오류: ' + err.message, 'danger');
+        }
+    }
+
+    function refreshCurrentUserInfo() {
+        if (currentUserId) {
+            handleUserInfoInternal(currentUserId);
+        } else {
+            showAlert('먼저 유저를 등록하거나 조회해 주세요.', 'secondary');
+        }
+    }
+</script>
+}
