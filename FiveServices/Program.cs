@@ -1,4 +1,5 @@
 using FiveServices.Data;
+using FiveServices.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +27,11 @@ var connectionString = builder.Configuration.GetConnectionString("MyGameDB")
 
 builder.Services.AddDbContext<MyGameDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+// HttpClient 및 PingService 등록 (싱글톤 및 백그라운드 서비스)
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<PingService>();
+builder.Services.AddHostedService(sp => sp.GetRequiredService<PingService>());
 
 builder.Services.AddControllersWithViews();
 
