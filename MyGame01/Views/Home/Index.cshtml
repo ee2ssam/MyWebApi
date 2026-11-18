@@ -1,20 +1,34 @@
 ﻿@{
-    ViewData["Title"] = "MyGame01 프로토콜 테스터";
+    ViewData["Title"] = "MyGame01 대시보드 & 프로토콜 테스터";
 }
 
 <div class="container py-3">
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-        <div>
+    <!-- Header with Tabs and Quick Ping -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-2 border-bottom">
+        <div class="mb-2 mb-md-0">
             <h2 class="fw-bold mb-1">
-                <i class="bi bi-joystick text-primary"></i> MyGame01 게임 프로토콜 테스터
+                <i class="bi bi-joystick text-primary"></i> MyGame01 관리 대시보드
             </h2>
             <p class="text-muted mb-0">
-                Supabase <code>game01_users</code> 저장 프로시저 및 5개 API 프로토콜을 실시간으로 테스트합니다.
+                Supabase <code>game01_users</code> 게임 프로토콜 및 Render.com 콜드스타트 방지 / Ping 테스터
             </p>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <span class="badge bg-secondary p-2" id="currentActiveUserBadge">선택된 유저: 없음</span>
+            <button class="btn btn-sm btn-outline-primary fw-bold" onclick="sendClientPing()">
+                <i class="bi bi-lightning-charge-fill"></i> 빠른 Ping 테스트
+            </button>
+            <ul class="nav nav-pills" id="mainTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold" id="protocol-tab" data-bs-toggle="pill" data-bs-target="#protocol-content" type="button" role="tab">
+                        🎮 게임 프로토콜 (5대 서비스)
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold" id="ping-tab" data-bs-toggle="pill" data-bs-target="#ping-content" type="button" role="tab">
+                        🚀 Render Ping & 콜드스타트
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -24,202 +38,398 @@
         <button type="button" class="btn-close" onclick="hideAlert()" aria-label="Close"></button>
     </div>
 
-    <div class="row g-4">
-        <!-- Left: 5 Protocol Test Cards -->
-        <div class="col-lg-7">
+    <!-- Tab Contents -->
+    <div class="tab-content" id="mainTabContent">
 
-            <!-- 1. UserAddService (1102) -->
-            <div class="card shadow-sm mb-3 border-success">
-                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center py-2">
-                    <h6 class="mb-0 fw-bold"><i class="bi bi-person-plus-fill"></i> [1102] 신규 유저 등록 (UserAddService)</h6>
-                    <span class="badge bg-light text-success">POST /api/UserAddService</span>
-                </div>
-                <div class="card-body py-2">
-                    <form onsubmit="handleUserAdd(event)">
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold mb-1">UserId (최대 8자)</label>
-                                <input type="text" id="addUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold mb-1">Name (닉네임)</label>
-                                <input type="text" id="addName" class="form-control form-control-sm" placeholder="용사01" maxlength="20" required />
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold mb-1">Password (최대 20자)</label>
-                                <input type="password" id="addPassword" class="form-control form-control-sm" placeholder="pass1234" maxlength="20" required />
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-sm btn-success w-100 fw-bold">
-                            유저 등록 전송 (Protocol 1102)
-                        </button>
-                    </form>
-                </div>
+        <!-- TAB 1: GAME PROTOCOLS -->
+        <div class="tab-pane fade show active" id="protocol-content" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0 text-secondary"><i class="bi bi-cpu"></i> 5대 게임 프로토콜 실행</h5>
+                <span class="badge bg-secondary p-2" id="currentActiveUserBadge">선택된 유저: 없음</span>
             </div>
 
-            <!-- 2. UserLoginService (1101) -->
-            <div class="card shadow-sm mb-3 border-primary">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2">
-                    <h6 class="mb-0 fw-bold"><i class="bi bi-box-arrow-in-right"></i> [1101] 로그인 (UserLoginService)</h6>
-                    <span class="badge bg-light text-primary">POST /api/UserLoginService</span>
-                </div>
-                <div class="card-body py-2">
-                    <form onsubmit="handleUserLogin(event)">
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold mb-1">UserId</label>
-                                <input type="text" id="loginUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold mb-1">Password</label>
-                                <input type="password" id="loginPassword" class="form-control form-control-sm" placeholder="pass1234" maxlength="20" required />
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-sm btn-primary w-100 fw-bold">
-                            로그인 전송 (Protocol 1101)
-                        </button>
-                    </form>
-                </div>
-            </div>
+            <div class="row g-4">
+                <!-- Left: 5 Protocol Test Cards -->
+                <div class="col-lg-7">
 
-            <!-- 3. UserInfoService (1103) -->
-            <div class="card shadow-sm mb-3 border-info">
-                <div class="card-header bg-info text-dark d-flex justify-content-between align-items-center py-2">
-                    <h6 class="mb-0 fw-bold"><i class="bi bi-person-badge"></i> [1103] 유저 정보 조회 (UserInfoService)</h6>
-                    <span class="badge bg-dark text-white">POST /api/UserInfoService</span>
-                </div>
-                <div class="card-body py-2">
-                    <form onsubmit="handleUserInfo(event)">
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-8">
-                                <label class="form-label small fw-bold mb-1">조회할 UserId</label>
-                                <input type="text" id="infoUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
-                            </div>
-                            <div class="col-md-4 d-flex align-items-end">
-                                <button type="submit" class="btn btn-sm btn-info w-100 fw-bold text-dark">
-                                    정보 조회 (Protocol 1103)
+                    <!-- 1. UserAddService (1102) -->
+                    <div class="card shadow-sm mb-3 border-success">
+                        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center py-2">
+                            <h6 class="mb-0 fw-bold"><i class="bi bi-person-plus-fill"></i> [1102] 신규 유저 등록 (UserAddService)</h6>
+                            <span class="badge bg-light text-success">POST /api/UserAddService</span>
+                        </div>
+                        <div class="card-body py-2">
+                            <form onsubmit="handleUserAdd(event)">
+                                <div class="row g-2 mb-2">
+                                    <div class="col-md-4">
+                                        <label class="form-label small fw-bold mb-1">UserId (최대 8자)</label>
+                                        <input type="text" id="addUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label small fw-bold mb-1">Name (닉네임)</label>
+                                        <input type="text" id="addName" class="form-control form-control-sm" placeholder="용사01" maxlength="20" required />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label small fw-bold mb-1">Password (최대 20자)</label>
+                                        <input type="password" id="addPassword" class="form-control form-control-sm" placeholder="pass1234" maxlength="20" required />
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-success w-100 fw-bold">
+                                    유저 등록 전송 (Protocol 1102)
                                 </button>
-                            </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
 
-            <!-- 4. LevelupService (1104) -->
-            <div class="card shadow-sm mb-3 border-warning">
-                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center py-2">
-                    <h6 class="mb-0 fw-bold"><i class="bi bi-arrow-up-circle-fill"></i> [1104] 레벨업 (LevelupService)</h6>
-                    <span class="badge bg-dark text-white">POST /api/LevelupService</span>
-                </div>
-                <div class="card-body py-2">
-                    <form onsubmit="handleLevelup(event)">
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-8">
-                                <label class="form-label small fw-bold mb-1">레벨업 대상 UserId</label>
-                                <input type="text" id="levelupUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
-                            </div>
-                            <div class="col-md-4 d-flex align-items-end">
-                                <button type="submit" class="btn btn-sm btn-warning w-100 fw-bold">
-                                    레벨업 (Protocol 1104)
+                    <!-- 2. UserLoginService (1101) -->
+                    <div class="card shadow-sm mb-3 border-primary">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2">
+                            <h6 class="mb-0 fw-bold"><i class="bi bi-box-arrow-in-right"></i> [1101] 로그인 (UserLoginService)</h6>
+                            <span class="badge bg-light text-primary">POST /api/UserLoginService</span>
+                        </div>
+                        <div class="card-body py-2">
+                            <form onsubmit="handleUserLogin(event)">
+                                <div class="row g-2 mb-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold mb-1">UserId</label>
+                                        <input type="text" id="loginUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold mb-1">Password</label>
+                                        <input type="password" id="loginPassword" class="form-control form-control-sm" placeholder="pass1234" maxlength="20" required />
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-primary w-100 fw-bold">
+                                    로그인 전송 (Protocol 1101)
                                 </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- 3. UserInfoService (1103) -->
+                    <div class="card shadow-sm mb-3 border-info">
+                        <div class="card-header bg-info text-dark d-flex justify-content-between align-items-center py-2">
+                            <h6 class="mb-0 fw-bold"><i class="bi bi-person-badge"></i> [1103] 유저 정보 조회 (UserInfoService)</h6>
+                            <span class="badge bg-dark text-white">POST /api/UserInfoService</span>
+                        </div>
+                        <div class="card-body py-2">
+                            <form onsubmit="handleUserInfo(event)">
+                                <div class="row g-2 mb-2">
+                                    <div class="col-md-8">
+                                        <label class="form-label small fw-bold mb-1">조회할 UserId</label>
+                                        <input type="text" id="infoUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
+                                    </div>
+                                    <div class="col-md-4 d-flex align-items-end">
+                                        <button type="submit" class="btn btn-sm btn-info w-100 fw-bold text-dark">
+                                            정보 조회 (Protocol 1103)
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- 4. LevelupService (1104) -->
+                    <div class="card shadow-sm mb-3 border-warning">
+                        <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center py-2">
+                            <h6 class="mb-0 fw-bold"><i class="bi bi-arrow-up-circle-fill"></i> [1104] 레벨업 (LevelupService)</h6>
+                            <span class="badge bg-dark text-white">POST /api/LevelupService</span>
+                        </div>
+                        <div class="card-body py-2">
+                            <form onsubmit="handleLevelup(event)">
+                                <div class="row g-2 mb-2">
+                                    <div class="col-md-8">
+                                        <label class="form-label small fw-bold mb-1">레벨업 대상 UserId</label>
+                                        <input type="text" id="levelupUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
+                                    </div>
+                                    <div class="col-md-4 d-flex align-items-end">
+                                        <button type="submit" class="btn btn-sm btn-warning w-100 fw-bold">
+                                            레벨업 (Protocol 1104)
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- 5. AddGoldService (1105) -->
+                    <div class="card shadow-sm mb-3 border-secondary">
+                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
+                            <h6 class="mb-0 fw-bold"><i class="bi bi-coin text-warning"></i> [1105] 골드 추가 (AddGoldService)</h6>
+                            <span class="badge bg-light text-dark">POST /api/AddGoldService</span>
+                        </div>
+                        <div class="card-body py-2">
+                            <form onsubmit="handleAddGold(event)">
+                                <div class="row g-2 mb-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold mb-1">대상 UserId</label>
+                                        <input type="text" id="goldUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold mb-1">추가할 Gold</label>
+                                        <input type="number" id="goldAmount" class="form-control form-control-sm" placeholder="500" required min="1" />
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-secondary w-100 fw-bold">
+                                    골드 추가 (Protocol 1105)
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right: Current User Status Card & JSON Response Console -->
+                <div class="col-lg-5">
+
+                    <!-- User Info Summary Card -->
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center py-2">
+                            <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-person-check-fill text-primary"></i> 플레이어 상태 창</h6>
+                            <button class="btn btn-sm btn-outline-secondary py-0" onclick="refreshCurrentUserInfo()">새로고침</button>
+                        </div>
+                        <div class="card-body py-2">
+                            <div class="row g-2 text-center">
+                                <div class="col-6">
+                                    <div class="p-2 border rounded bg-light">
+                                        <small class="text-muted d-block">아이디 / 닉네임</small>
+                                        <strong id="cardUserLabel">-</strong>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 border rounded bg-light">
+                                        <small class="text-muted d-block">레벨 (Level)</small>
+                                        <span class="badge bg-warning text-dark fs-6" id="cardUserLevel">Lv. -</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 border rounded bg-light">
+                                        <small class="text-muted d-block">체력 (HP)</small>
+                                        <span class="text-danger fw-bold fs-6" id="cardUserHealth">-</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 border rounded bg-light">
+                                        <small class="text-muted d-block">소지금 (Gold)</small>
+                                        <span class="text-warning fw-bold fs-6" id="cardUserGold">- G</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
 
-            <!-- 5. AddGoldService (1105) -->
-            <div class="card shadow-sm mb-3 border-secondary">
-                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
-                    <h6 class="mb-0 fw-bold"><i class="bi bi-coin text-warning"></i> [1105] 골드 추가 (AddGoldService)</h6>
-                    <span class="badge bg-light text-dark">POST /api/AddGoldService</span>
-                </div>
-                <div class="card-body py-2">
-                    <form onsubmit="handleAddGold(event)">
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold mb-1">대상 UserId</label>
-                                <input type="text" id="goldUserId" class="form-control form-control-sm" placeholder="user01" maxlength="8" required />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold mb-1">추가할 Gold</label>
-                                <input type="number" id="goldAmount" class="form-control form-control-sm" placeholder="500" required min="1" />
-                            </div>
+                    <!-- API Response Console -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
+                            <h6 class="mb-0 fw-bold small"><i class="bi bi-terminal"></i> 실시간 API 프로토콜 통신 콘솔</h6>
+                            <span id="responseStatusBadge" class="badge bg-secondary">대기 중</span>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-secondary w-100 fw-bold">
-                            골드 추가 (Protocol 1105)
-                        </button>
-                    </form>
+                        <div class="card-body bg-light font-monospace py-2">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small class="text-muted" id="lastApiInfo">호출 기록 없음</small>
+                                <small class="text-muted" id="lastApiTime"></small>
+                            </div>
+                            <div class="mb-2">
+                                <small class="text-muted fw-bold">Result 코드 해석:</small>
+                                <span id="resultInterpretation" class="badge bg-info text-dark">-</span>
+                            </div>
+                            <pre id="responseJson" class="p-3 bg-dark text-light rounded mb-0" style="min-height: 280px; max-height: 380px; overflow: auto; font-size: 13px;">// 테스트 버튼을 클릭하면 요청 및 응답 패킷이 표시됩니다.</pre>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
         </div>
 
-        <!-- Right: Current User Status Card & JSON Response Console -->
-        <div class="col-lg-5">
+        <!-- TAB 2: PING & COLD START CONTROLS -->
+        <div class="tab-pane fade" id="ping-content" role="tabpanel">
+            <div class="row g-4">
+                
+                <!-- 1. Client-to-Server Ping Test Card -->
+                <div class="col-lg-5">
+                    <div class="card shadow-sm mb-4 border-primary">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-bold"><i class="bi bi-broadcast"></i> 수동 즉시 Ping (클라이언트 ➔ 서버)</h6>
+                            <span class="badge bg-light text-primary">GET /api/ping</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="small text-muted mb-3">
+                                버튼을 누르면 서버로 즉시 Ping을 보내 <strong>응답 지연 시간(Latency)</strong>과 <strong>콜드스타트 여부</strong>, <strong>서버 Uptime</strong>을 실시간으로 측정합니다.
+                            </p>
+                            <button id="btnManualPing" class="btn btn-primary w-100 py-2 fw-bold mb-3" onclick="sendClientPing()">
+                                <i class="bi bi-send-fill"></i> 지금 즉시 Ping 전송 (테스트)
+                            </button>
 
-            <!-- User Info Summary Card -->
-            <div class="card shadow-sm mb-3">
-                <div class="card-header bg-light d-flex justify-content-between align-items-center py-2">
-                    <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-person-check-fill text-primary"></i> 플레이어 상태 창</h6>
-                    <button class="btn btn-sm btn-outline-secondary py-0" onclick="refreshCurrentUserInfo()">새로고침</button>
-                </div>
-                <div class="card-body py-2">
-                    <div class="row g-2 text-center">
-                        <div class="col-6">
-                            <div class="p-2 border rounded bg-light">
-                                <small class="text-muted d-block">아이디 / 닉네임</small>
-                                <strong id="cardUserLabel">-</strong>
+                            <div class="p-3 bg-light rounded border">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">응답 지연 시간:</span>
+                                    <strong id="clientLatency">- ms</strong>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">서버 상태:</span>
+                                    <span id="clientServerStatus" class="badge bg-secondary">미확인</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">서비스 명:</span>
+                                    <span id="clientServiceName" class="fw-semibold">MyGame01</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">서버 Uptime:</span>
+                                    <span id="clientServerUptime" class="fw-semibold">-</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">콜드스타트 감지:</span>
+                                    <span id="clientColdStartBadge" class="badge bg-secondary">-</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted">서버 환경:</span>
+                                    <span id="clientServerEnv" class="badge bg-info text-dark">-</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="p-2 border rounded bg-light">
-                                <small class="text-muted d-block">레벨 (Level)</small>
-                                <span class="badge bg-warning text-dark fs-6" id="cardUserLevel">Lv. -</span>
-                            </div>
+                    </div>
+
+                    <!-- Browser Keep-Alive Card -->
+                    <div class="card shadow-sm border-info">
+                        <div class="card-header bg-info text-dark d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-bold"><i class="bi bi-clock-history"></i> 브라우저 Keep-Alive (클라이언트 자동 Ping)</h6>
+                            <span class="badge bg-dark text-white">10분 주기</span>
                         </div>
-                        <div class="col-6">
-                            <div class="p-2 border rounded bg-light">
-                                <small class="text-muted d-block">체력 (HP)</small>
-                                <span class="text-danger fw-bold fs-6" id="cardUserHealth">-</span>
+                        <div class="card-body">
+                            <p class="small text-muted mb-3">
+                                웹페이지가 열려있는 동안 브라우저가 주기적으로(10분마다) 서버에 Ping을 보내 Render 무료 티어의 15분 절전 모드를 방지합니다.
+                            </p>
+                            <div class="d-flex gap-2 mb-3">
+                                <button id="btnStartBrowserPing" class="btn btn-outline-success flex-fill" onclick="toggleBrowserPing(true)">
+                                    <i class="bi bi-play-fill"></i> 브라우저 Ping 시작
+                                </button>
+                                <button id="btnStopBrowserPing" class="btn btn-outline-secondary flex-fill" onclick="toggleBrowserPing(false)" disabled>
+                                    <i class="bi bi-pause-fill"></i> 일시 중지
+                                </button>
                             </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="p-2 border rounded bg-light">
-                                <small class="text-muted d-block">소지금 (Gold)</small>
-                                <span class="text-warning fw-bold fs-6" id="cardUserGold">- G</span>
+                            <div class="d-flex justify-content-between small text-muted">
+                                <span>작동 상태: <span id="browserPingStatus" class="fw-bold text-secondary">중지됨</span></span>
+                                <span id="browserPingTimer">다음 핑: 대기 중</span>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- 2. Server-side Background Worker Card & Logs -->
+                <div class="col-lg-7">
+                    <div class="card shadow-sm mb-4 border-secondary">
+                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-bold"><i class="bi bi-gear-wide-connected"></i> 서버 백그라운드 PingService (자체 자동 핑)</h6>
+                            <span id="serverWorkerStatusBadge" class="badge bg-secondary">로딩 중...</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="small text-muted mb-3">
+                                .NET <code>BackgroundService</code>(호스팅 워커)가 주기적으로 서버 자신에게 HTTP 요청을 보내 절전을 방지합니다.
+                                브라우저 창을 닫아도 서버 내부에서 계속 동작하도록 수동으로 활성화하거나 주기를 변경할 수 있습니다.
+                            </p>
+
+                            <!-- Server Worker Controls -->
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-6">
+                                    <button id="btnToggleServerWorker" class="btn btn-outline-primary w-100 fw-bold" onclick="toggleServerPingWorker()">
+                                        <i class="bi bi-toggle-on"></i> 자동 핑 상태 전환
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-outline-secondary w-100 fw-bold" onclick="triggerServerPing()">
+                                        <i class="bi bi-send"></i> 서버에서 지금 즉시 1회 발송
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Worker Settings Form -->
+                            <form onsubmit="handleSavePingConfig(event)" class="p-3 bg-light rounded border mb-3">
+                                <div class="row g-2 align-items-end">
+                                    <div class="col-md-7">
+                                        <label class="form-label small fw-bold mb-1">타겟 URL (비어있으면 기본값 사용)</label>
+                                        <input type="text" id="configTargetUrl" class="form-control form-control-sm" placeholder="https://mygame01.onrender.com/api/ping" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold mb-1">간격 (분)</label>
+                                        <input type="number" id="configInterval" class="form-control form-control-sm" min="1" max="60" value="14" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-sm btn-dark w-100 fw-bold">저장</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- Worker Statistics Summary -->
+                            <div class="row g-2 text-center mb-3">
+                                <div class="col-4">
+                                    <div class="p-2 bg-light border rounded">
+                                        <small class="text-muted d-block">서버 Uptime</small>
+                                        <strong id="serverStatUptime" class="small">-</strong>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="p-2 bg-light border rounded">
+                                        <small class="text-muted d-block">성공 / 실패</small>
+                                        <span class="text-success fw-bold" id="serverStatSuccess">0</span> / 
+                                        <span class="text-danger fw-bold" id="serverStatFailure">0</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="p-2 bg-light border rounded">
+                                        <small class="text-muted d-block">최근 결과</small>
+                                        <strong id="serverStatLastResult" class="small text-truncate d-block">-</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Worker Recent Ping Logs Table -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="small fw-bold mb-0 text-muted"><i class="bi bi-card-list"></i> 최근 Ping 실행 기록</h6>
+                                <button class="btn btn-sm btn-link p-0 text-decoration-none" onclick="loadServerPingStatus()">
+                                    <i class="bi bi-arrow-clockwise"></i> 로그 새로고침
+                                </button>
+                            </div>
+                            <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                <table class="table table-sm table-hover align-middle mb-0 text-center" style="font-size: 13px;">
+                                    <thead class="table-light sticky-top">
+                                        <tr>
+                                            <th>시각</th>
+                                            <th>유형</th>
+                                            <th>상태</th>
+                                            <th>소요시간</th>
+                                            <th>결과</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="serverPingLogsBody">
+                                        <tr>
+                                            <td colspan="5" class="text-muted py-2">기록을 불러오는 중...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-
-            <!-- API Response Console -->
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
-                    <h6 class="mb-0 fw-bold small"><i class="bi bi-terminal"></i> 실시간 API 프로토콜 통신 콘솔</h6>
-                    <span id="responseStatusBadge" class="badge bg-secondary">대기 중</span>
-                </div>
-                <div class="card-body bg-light font-monospace py-2">
-                    <div class="d-flex justify-content-between mb-1">
-                        <small class="text-muted" id="lastApiInfo">호출 기록 없음</small>
-                        <small class="text-muted" id="lastApiTime"></small>
-                    </div>
-                    <div class="mb-2">
-                        <small class="text-muted fw-bold">Result 코드 해석:</small>
-                        <span id="resultInterpretation" class="badge bg-info text-dark">-</span>
-                    </div>
-                    <pre id="responseJson" class="p-3 bg-dark text-light rounded mb-0" style="min-height: 280px; max-height: 380px; overflow: auto; font-size: 13px;">// 테스트 버튼을 클릭하면 요청 및 응답 패킷이 표시됩니다.</pre>
-                </div>
-            </div>
-
         </div>
+
     </div>
 </div>
 
 @section Scripts {
 <script>
+    const PING_API_URL = '/api/ping';
     let currentUserId = '';
+    let browserCountdownId = null;
+    let countdownSeconds = 600; // 10분
+    let isServerAutoPing = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // 페이지 로드 시 Ping 상태 확인 및 최초 Ping 1회 측정
+        loadServerPingStatus();
+        sendClientPing();
+    });
 
     function setActiveUser(userId) {
         if (!userId) return;
@@ -245,6 +455,245 @@
     function hideAlert() {
         document.getElementById('alertBox').classList.add('d-none');
     }
+
+    // ==========================================
+    // 1. PING & COLD START FUNCTIONS
+    // ==========================================
+
+    // 수동 클라이언트 Ping 전송
+    async function sendClientPing() {
+        const btn = document.getElementById('btnManualPing');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Ping 측정 중...';
+        }
+
+        const startTime = performance.now();
+        try {
+            const res = await fetch(PING_API_URL + '?t=' + Date.now());
+            const endTime = performance.now();
+            const latency = Math.round(endTime - startTime);
+
+            const data = await res.json();
+
+            // UI 갱신
+            const latencyElem = document.getElementById('clientLatency');
+            latencyElem.textContent = `${latency} ms`;
+            if (latency > 5000) {
+                latencyElem.className = 'text-danger fw-bold';
+            } else if (latency > 1000) {
+                latencyElem.className = 'text-warning fw-bold';
+            } else {
+                latencyElem.className = 'text-success fw-bold';
+            }
+
+            const statusBadge = document.getElementById('clientServerStatus');
+            statusBadge.textContent = data.status || 'OK';
+            statusBadge.className = res.ok ? 'badge bg-success' : 'badge bg-danger';
+
+            document.getElementById('clientServerUptime').textContent = data.uptime || '-';
+
+            const coldBadge = document.getElementById('clientColdStartBadge');
+            if (data.isColdStart) {
+                coldBadge.textContent = '❄️ 콜드스타트 발생 (기동 < 60초)';
+                coldBadge.className = 'badge bg-warning text-dark';
+            } else {
+                coldBadge.textContent = '🔥 정상 작동 중 (Warmed Up)';
+                coldBadge.className = 'badge bg-success';
+            }
+
+            document.getElementById('clientServerEnv').textContent = data.environment || 'Production';
+
+            showAlert(`Ping 응답 성공! (${latency}ms, Uptime: ${data.uptime})`, 'success');
+        } catch (err) {
+            document.getElementById('clientLatency').textContent = '오류';
+            document.getElementById('clientLatency').className = 'text-danger fw-bold';
+            document.getElementById('clientServerStatus').textContent = '응답 없음';
+            document.getElementById('clientServerStatus').className = 'badge bg-danger';
+            showAlert('Ping 전송 실패: ' + err.message, 'danger');
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-send-fill"></i> 지금 즉시 Ping 전송 (테스트)';
+            }
+        }
+    }
+
+    // 서버 워커 상태 불러오기
+    async function loadServerPingStatus() {
+        try {
+            const res = await fetch(`${PING_API_URL}/status`);
+            if (!res.ok) return;
+            const data = await res.json();
+
+            isServerAutoPing = data.isAutoPingEnabled;
+            updateServerPingUI(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    function updateServerPingUI(data) {
+        const statusBadge = document.getElementById('serverWorkerStatusBadge');
+        const toggleBtn = document.getElementById('btnToggleServerWorker');
+
+        if (data.isAutoPingEnabled) {
+            statusBadge.textContent = `활성화 (매 ${data.intervalMinutes}분)`;
+            statusBadge.className = 'badge bg-success';
+            toggleBtn.className = 'btn btn-outline-danger w-100 fw-bold';
+            toggleBtn.innerHTML = '<i class="bi bi-stop-circle"></i> 자동 핑 비활성화 (중지)';
+        } else {
+            statusBadge.textContent = '비활성화 (중지됨)';
+            statusBadge.className = 'badge bg-secondary';
+            toggleBtn.className = 'btn btn-outline-success w-100 fw-bold';
+            toggleBtn.innerHTML = '<i class="bi bi-play-circle"></i> 자동 핑 활성화 (시작)';
+        }
+
+        const urlInput = document.getElementById('configTargetUrl');
+        if (!urlInput.value) {
+            urlInput.value = data.targetUrl || `${window.location.origin}/api/ping`;
+        }
+        document.getElementById('configInterval').value = data.intervalMinutes;
+
+        // 통계 갱신
+        const uptime = data.serverUptime;
+        document.getElementById('serverStatUptime').textContent = 
+            `${uptime.days}일 ${uptime.hours}시간 ${uptime.minutes}분`;
+        document.getElementById('serverStatSuccess').textContent = data.successCount;
+        document.getElementById('serverStatFailure').textContent = data.failureCount;
+        document.getElementById('serverStatLastResult').textContent = data.lastPingResult || '없음';
+
+        // 로그 테이블 렌더링
+        renderPingLogs(data.recentLogs);
+    }
+
+    function renderPingLogs(logs) {
+        const tbody = document.getElementById('serverPingLogsBody');
+        tbody.innerHTML = '';
+
+        if (!logs || logs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-muted py-2">아직 기록된 Ping 로그가 없습니다.</td></tr>';
+            return;
+        }
+
+        logs.forEach(log => {
+            const tr = document.createElement('tr');
+            const timeStr = new Date(log.timestamp).toLocaleTimeString();
+            const badgeType = log.isManual 
+                ? '<span class="badge bg-secondary">수동</span>' 
+                : '<span class="badge bg-info text-dark">자동</span>';
+            const statusBadge = log.isSuccess 
+                ? `<span class="badge bg-success">${log.statusCode || 200}</span>` 
+                : `<span class="badge bg-danger">${log.statusCode || 'ERR'}</span>`;
+
+            tr.innerHTML = `
+                <td>${timeStr}</td>
+                <td>${badgeType}</td>
+                <td>${statusBadge}</td>
+                <td>${log.durationMs}ms</td>
+                <td class="text-truncate" style="max-width: 160px;" title="${escapeHtml(log.message)}">${escapeHtml(log.message)}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // 서버 워커 활성화 / 비활성화 토글
+    async function toggleServerPingWorker() {
+        try {
+            const nextState = !isServerAutoPing;
+            const res = await fetch(`${PING_API_URL}/configure`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ enabled: nextState })
+            });
+            const data = await res.json();
+            showAlert(`서버 자동 핑이 ${nextState ? '활성화' : '비활성화'}되었습니다.`);
+            loadServerPingStatus();
+        } catch (err) {
+            showAlert('설정 변경 실패: ' + err.message, 'danger');
+        }
+    }
+
+    // 서버에서 지금 즉시 1회 발송 트리거
+    async function triggerServerPing() {
+        try {
+            showAlert('서버에서 Ping을 발송 중입니다...', 'info');
+            const targetUrl = document.getElementById('configTargetUrl').value || `${window.location.origin}/api/ping`;
+            const res = await fetch(`${PING_API_URL}/send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ targetUrl: targetUrl })
+            });
+            const result = await res.json();
+            showAlert(`서버 Ping 완료: ${result.message} (${result.durationMs}ms)`);
+            loadServerPingStatus();
+        } catch (err) {
+            showAlert('서버 Ping 발송 실패: ' + err.message, 'danger');
+        }
+    }
+
+    // 서버 핑 설정 저장
+    async function handleSavePingConfig(e) {
+        e.preventDefault();
+        const interval = parseInt(document.getElementById('configInterval').value, 10);
+        const targetUrl = document.getElementById('configTargetUrl').value;
+
+        try {
+            const res = await fetch(`${PING_API_URL}/configure`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    intervalMinutes: interval,
+                    targetUrl: targetUrl || null
+                })
+            });
+            const data = await res.json();
+            showAlert('Ping 설정이 저장되었습니다.');
+            loadServerPingStatus();
+        } catch (err) {
+            showAlert('저장 실패: ' + err.message, 'danger');
+        }
+    }
+
+    // 브라우저 Keep-Alive 토글
+    function toggleBrowserPing(enabled) {
+        const statusElem = document.getElementById('browserPingStatus');
+        const timerElem = document.getElementById('browserPingTimer');
+
+        if (enabled) {
+            statusElem.textContent = '작동 중 (10분 주기)';
+            statusElem.className = 'text-success fw-bold';
+            countdownSeconds = 600;
+
+            browserCountdownId = setInterval(() => {
+                countdownSeconds--;
+                if (countdownSeconds <= 0) {
+                    countdownSeconds = 600;
+                    fetch(PING_API_URL + '?browserKeepAlive=1');
+                }
+                const min = Math.floor(countdownSeconds / 60);
+                const sec = countdownSeconds % 60;
+                timerElem.textContent = `다음 핑: ${min}분 ${sec}초`;
+            }, 1000);
+
+            document.getElementById('btnStartBrowserPing').disabled = true;
+            document.getElementById('btnStopBrowserPing').disabled = false;
+            showAlert('브라우저 Keep-Alive가 시작되었습니다.');
+        } else {
+            statusElem.textContent = '중지됨';
+            statusElem.className = 'text-secondary fw-bold';
+            clearInterval(browserCountdownId);
+            timerElem.textContent = '다음 핑: 대기 중';
+
+            document.getElementById('btnStartBrowserPing').disabled = false;
+            document.getElementById('btnStopBrowserPing').disabled = true;
+            showAlert('브라우저 Keep-Alive가 중지되었습니다.', 'secondary');
+        }
+    }
+
+    // ==========================================
+    // 2. GAME PROTOCOL FUNCTIONS
+    // ==========================================
 
     function setConsole(serviceName, requestData, responseData, statusCode, interpretation) {
         document.getElementById('lastApiInfo').innerHTML = `<strong class="text-primary">POST</strong> /api/${serviceName}`;
@@ -328,15 +777,18 @@
             let interpretation = '';
             if (data.result === 0) {
                 interpretation = 'Result: 0 (로그인 성공)';
-                showAlert(`[1101] '${userId}' 로그인 성공!`);
+                showAlert(`[1101] 로그인 성공! 환영합니다, ${userId}님!`);
                 setActiveUser(userId);
                 handleUserInfoInternal(userId);
             } else if (data.result === 1) {
-                interpretation = 'Result: 1 (유저 아이디가 없음)';
-                showAlert(`[1101] 유저 아이디가 존재하지 않습니다.`, 'warning');
+                interpretation = 'Result: 1 (유저 정보 없음)';
+                showAlert(`[1101] 존재하지 않는 유저입니다.`, 'warning');
+            } else if (data.result === 2) {
+                interpretation = 'Result: 2 (비밀번호 불일치)';
+                showAlert(`[1101] 비밀번호가 일치하지 않습니다.`, 'danger');
             } else {
-                interpretation = 'Result: 2 (로그인 실패 - 비밀번호 불일치)';
-                showAlert(`[1101] 로그인 실패: 비밀번호가 일치하지 않습니다.`, 'danger');
+                interpretation = `Result: ${data.result} (로그인 실패)`;
+                showAlert(`[1101] 로그인 실패`, 'danger');
             }
 
             setConsole('UserLoginService', reqBody, data, res.status, interpretation);
@@ -354,6 +806,7 @@
 
     async function handleUserInfoInternal(userId) {
         if (!userId) return;
+
         const reqBody = {
             protocol: 1103,
             userId: userId
@@ -369,18 +822,22 @@
 
             let interpretation = '';
             if (data.result === 0) {
-                interpretation = 'Result: 0 (정보 가져오기 성공)';
-                showAlert(`[1103] '${userId}' 유저 정보 조회 성공!`);
-                setActiveUser(userId);
+                interpretation = `Result: 0 (조회 성공 - ${data.name}, Lv.${data.level}, HP:${data.health}, Gold:${data.gold})`;
+                showAlert(`[1103] 유저 '${userId}' 정보 조회 성공!`);
 
-                // 플레이어 상태 창 갱신
-                document.getElementById('cardUserLabel').textContent = `${data.userId} (${data.name})`;
+                document.getElementById('cardUserLabel').textContent = `${data.userId} / ${data.name}`;
                 document.getElementById('cardUserLevel').textContent = `Lv. ${data.level}`;
-                document.getElementById('cardUserHealth').textContent = data.health;
-                document.getElementById('cardUserGold').textContent = `${data.gold.toLocaleString()} G`;
+                document.getElementById('cardUserHealth').textContent = `${data.health} HP`;
+                document.getElementById('cardUserGold').textContent = `${data.gold} G`;
+
+                setActiveUser(userId);
             } else {
-                interpretation = 'Result: 1 (정보 가져오기 실패 - 유저 없음)';
+                interpretation = 'Result: 1 (유저 정보 없음)';
                 showAlert(`[1103] 유저 정보를 찾을 수 없습니다.`, 'warning');
+                document.getElementById('cardUserLabel').textContent = '조회 실패';
+                document.getElementById('cardUserLevel').textContent = 'Lv. -';
+                document.getElementById('cardUserHealth').textContent = '-';
+                document.getElementById('cardUserGold').textContent = '- G';
             }
 
             setConsole('UserInfoService', reqBody, data, res.status, interpretation);
@@ -393,6 +850,7 @@
     async function handleLevelup(e) {
         e.preventDefault();
         const userId = document.getElementById('levelupUserId').value.trim();
+
         const reqBody = {
             protocol: 1104,
             userId: userId
@@ -466,6 +924,11 @@
         } else {
             showAlert('먼저 유저를 등록하거나 조회해 주세요.', 'secondary');
         }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 </script>
 }

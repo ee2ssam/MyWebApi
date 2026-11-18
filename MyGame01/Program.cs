@@ -31,6 +31,11 @@ builder.Services.AddDbContext<MyGameDbContext>(options =>
 // 게임 프로토콜 서비스 저장소 DI 등록
 builder.Services.AddScoped<IGameServiceRepository, GameServiceRepository>();
 
+// HttpClient 및 PingService 등록 (싱글톤 및 백그라운드 서비스)
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<PingService>();
+builder.Services.AddHostedService(sp => sp.GetRequiredService<PingService>());
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -79,15 +84,8 @@ app.MapGet("/api/db-check", async (MyGameDbContext dbContext) =>
     }
 });
 
-// Render Health Check & Ping endpoint
+// Render Health Check endpoint
 app.MapGet("/healthz", () => Results.Ok("OK"));
-app.MapGet("/api/ping", () => Results.Ok(new
-{
-    status = "Healthy",
-    message = "pong",
-    time = DateTime.UtcNow,
-    service = "MyGame01"
-}));
 
 app.MapControllerRoute(
     name: "default",
