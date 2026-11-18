@@ -12,9 +12,9 @@ namespace MyGame01.Controllers
     {
         private readonly IGameServiceRepository _repository;
 
-        public UserLoginServiceController(IGameServiceRepository repository)
+        public UserLoginServiceController(IGameServiceRepository repository1)
         {
-            _repository = repository;
+            _repository = repository1;
         }
 
         [HttpPost]
