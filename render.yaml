@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: fiveservices
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: singapore # or oregon, frankfurt
+    healthCheckPath: /healthz
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__MyGameDB
+        value: Host=aws-0-ap-northeast-1.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.xajzrpxzujckdtnpzdft;Password=E22ssam28465!;SSL Mode=Require;Trust Server Certificate=true;

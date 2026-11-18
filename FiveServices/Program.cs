@@ -1,7 +1,23 @@
 using FiveServices.Data;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Render 등 클라우드 플랫폼에서 PORT 환경 변수를 제공할 때 해당 포트로 바인딩
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
+
+// 리버스 프록시(Render 등) 뒤에서 올바른 HTTPS 프로토콜 및 클라이언트 IP를 인식하도록 설정
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("MyGameDB")
@@ -14,6 +30,9 @@ builder.Services.AddDbContext<MyGameDbContext>(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// 리버스 프록시 헤더 적용 (반드시 파이프라인 최상단에 위치)
+app.UseForwardedHeaders();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -47,6 +66,9 @@ app.MapGet("/api/db-check", async (MyGameDbContext dbContext) =>
         return Results.Problem(detail: ex.Message, title: "Database Connection Error");
     }
 });
+
+// Render Health Check endpoint (경량 헬스체크용)
+app.MapGet("/healthz", () => Results.Ok("OK"));
 
 app.MapControllerRoute(
     name: "default",
